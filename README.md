@@ -34,7 +34,12 @@ config.get();
 // { "demo": { "rad": "cool" } }
 config.get("demo.rad");
 // "cool"
+config.get("nothing.real");
+// undefined (not a thrown error)
 ```
+
+Notice that `get` accepts [hoek](https://github.com/hapijs/hoek)`.reach`-style
+paths, and will return undefined if they do not exist.
 
 ## Advanced use
 
