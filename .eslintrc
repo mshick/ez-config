@@ -1,0 +1,4 @@
+{
+  "parser": "babel-eslint",
+  "extends": "defaults/configurations/walmart/es6-node"
+}

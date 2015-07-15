@@ -1,0 +1,7 @@
+{
+  "overwritten": "baz",
+  "local": {
+    "nested1": "abc",
+    "nested2": 123
+  }
+}
