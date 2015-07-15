@@ -1,6 +1,6 @@
 {
   "name": "ez-config",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple environment-aware configuration utility exporting clean JS objects",
   "main": "index.js",
   "scripts": {

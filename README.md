@@ -48,6 +48,8 @@ paths, and will return undefined if they do not exist.
 than `config`.
 * Allows an environmental override via JSON string, e.g. `NODE_CONFIG='{"demo":"foo"}' node app.js`
 * Allows a command-line override via JSON string, e.g. `node app.js --NODE_CONFIG='{"demo":"foo"}'`
+* You can include the ES6 code if that's useful, with `require("ez-config/es6")` 
+-- the Object.assign polyfill will not be loaded
 
 ## Tests
 
