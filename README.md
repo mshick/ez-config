@@ -1,10 +1,11 @@
-EZ Config ![npm release](https://img.shields.io/npm/v/ez-config.svg?style=flat)
-=========
+# EZ Config
 
 A simple configuration file loader for node.js following some of the basic 
 style of [node-config](https://github.com/lorenwest/node-config), but with a 
 focus on simplicity. It supports `js`, `json`, and `yaml` configuration files,
 as well as environmental overrides.
+
+![npm release](https://img.shields.io/npm/v/ez-config.svg?style=flat)
 
 ## Installation
 
