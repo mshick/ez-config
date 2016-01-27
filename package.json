@@ -8,10 +8,10 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "build": "babel -d dst/ lib/",
-    "prepublish": "npm run build",
-    "test": "lab -a code --sourcemaps --transform test/transform.js",
-    "coverage": "lab -a code --sourcemaps --transform test/transform.js -r html -o coverage.html"
+    "prepublish": "npm test",
+    "pretest": "eslint lib",
+    "test": "lab -a code --sourcemaps",
+    "coverage": "lab -a code --sourcemaps -r html -o coverage.html"
   },
   "repository": {
     "type": "git",
@@ -35,8 +35,6 @@
   },
   "homepage": "https://github.com/mshick/ez-config",
   "devDependencies": {
-    "babel": "^5.6.14",
-    "babel-eslint": "^3.1.23",
     "code": "^1.4.1",
     "eslint": "^0.24.1",
     "eslint-config-defaults": "^3.1.0",

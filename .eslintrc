@@ -1,4 +1,7 @@
 {
-  "parser": "babel-eslint",
-  "extends": "defaults/configurations/walmart/es6-node"
+  "extends": "defaults/configurations/walmart/es6-node",
+  "rules": {
+    "strict": 0,
+    "global-require": 0
+  }
 }

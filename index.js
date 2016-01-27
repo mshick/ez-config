@@ -1,1 +1,1 @@
-module.exports = require("./dst/lib");
+module.exports = require("./lib");

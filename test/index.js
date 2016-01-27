@@ -11,7 +11,7 @@ var expect = code.expect;
 describe("config", function () {
 
   before(function (done) {
-    process.env.NODE_CONFIG_DIR = "./test/config";
+    process.env.NODE_CONFIG_DIR = "./test/fixtures/config";
     done();
   });
 
@@ -44,6 +44,15 @@ describe("config", function () {
     var config = new EzConfig();
     expect(config.get("overwritten")).to.equal(envVal);
 
+    done();
+  });
+
+
+  it("can also switch the config dir via a method", function (done) {
+
+    var config = require("../lib");
+    config.loadDir("./test/fixtures/config-loaddir");
+    expect(config.get("default.nested1")).to.equal("abc");
     done();
   });
 });
