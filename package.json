@@ -3,9 +3,13 @@
   "version": "0.1.1",
   "description": "A simple environment-aware configuration utility exporting clean JS objects",
   "main": "index.js",
+  "jsnext:main": "lib/index.js",
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "scripts": {
-    "compile": "babel -d lib/ es6/",
-    "prepublish": "npm run compile",
+    "build": "babel -d dst/ lib/",
+    "prepublish": "npm run build",
     "test": "lab -a code --sourcemaps --transform test/transform.js",
     "coverage": "lab -a code --sourcemaps --transform test/transform.js -r html -o coverage.html"
   },
@@ -39,9 +43,8 @@
     "lab": "^5.13.0"
   },
   "dependencies": {
-    "hoek": "^2.14.0",
+    "hoek": "^3.0.4",
     "js-yaml": "^3.3.1",
-    "minimist": "^1.1.1",
-    "object-assign": "^3.0.0"
+    "minimist": "^1.1.1"
   }
 }

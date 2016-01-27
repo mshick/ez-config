@@ -32,18 +32,18 @@ var argv = _minimist2["default"](process.argv.slice(2));
 var env = {};
 var configSources = [];
 
-var internals = {};
-
-internals.initParam = function (paramName, defaultValue) {
+var initParam = function initParam(paramName, defaultValue) {
 
   var value = argv[paramName] || process.env[paramName] || defaultValue;
   env[paramName] = value;
   return value;
 };
 
-internals.initConfigDir = function (paramName) {
+var initConfigDir = function initConfigDir(paramName, configDir) {
 
-  var configDir = internals.initParam(paramName, _path2["default"].join(process.cwd(), "config"));
+  if (!configDir) {
+    configDir = initParam(paramName, _path2["default"].join(process.cwd(), "config"));
+  }
 
   if (!_path2["default"].isAbsolute(configDir)) {
     configDir = _path2["default"].join(process.cwd(), configDir);
@@ -52,7 +52,7 @@ internals.initConfigDir = function (paramName) {
   return configDir;
 };
 
-internals.getHostName = function (hostName) {
+var getHostName = function getHostName(hostName) {
 
   // Determine the host name from the OS module, $HOST, or $HOSTNAME
   // Remove any . appendages, and default to null if not set
@@ -70,7 +70,7 @@ internals.getHostName = function (hostName) {
   return hostName ? hostName.split(".")[0] : null;
 };
 
-internals.getFileContents = function (filepath) {
+var getFileContents = function getFileContents(filepath) {
 
   var contents = null;
 
@@ -96,7 +96,7 @@ internals.getFileContents = function (filepath) {
   return contents;
 };
 
-internals.parseContents = function (raw, filepath) {
+var parseContents = function parseContents(raw, filepath) {
 
   var parsed = undefined;
   var ext = undefined;
@@ -128,9 +128,9 @@ internals.parseContents = function (raw, filepath) {
   return parsed;
 };
 
-internals.parseConfig = function (raw, filepath, name) {
+var parseConfig = function parseConfig(raw, filepath, name) {
 
-  var config = internals.parseContents(raw, filepath);
+  var config = parseContents(raw, filepath);
 
   // Keep track of this configuration sources, including empty ones
   if (typeof config === "object") {
@@ -144,20 +144,20 @@ internals.parseConfig = function (raw, filepath, name) {
   return config;
 };
 
-internals.parseFile = function (filepath) {
+var parseFile = function parseFile(filepath) {
 
-  var contents = internals.getFileContents(filepath);
+  var contents = getFileContents(filepath);
 
   var parsed = null;
 
   if (contents) {
-    parsed = internals.parseConfig(contents, filepath);
+    parsed = parseConfig(contents, filepath);
   }
 
   return parsed;
 };
 
-internals.getFiles = function (baseNames, extNames) {
+var getFiles = function getFiles(baseNames, extNames) {
   var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
   var configDir = options.configDir;
@@ -180,17 +180,17 @@ internals.getFiles = function (baseNames, extNames) {
   return _hoek2["default"].flatten(fileGroups);
 };
 
-internals.loadFileConfigs = function (baseNames) {
+var loadFileConfigs = function loadFileConfigs(baseNames) {
   var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
   var config = {};
 
   var extNames = ["js", "json", "yaml", "yml"];
 
-  var filenames = internals.getFiles(baseNames, extNames, options);
+  var filenames = getFiles(baseNames, extNames, options);
 
   filenames.forEach(function (filename) {
-    var parsed = internals.parseFile(filename);
+    var parsed = parseFile(filename);
     if (parsed) {
       _hoek2["default"].merge(config, parsed);
     }
@@ -199,13 +199,13 @@ internals.loadFileConfigs = function (baseNames) {
   return config;
 };
 
-internals.loadEnvConfigs = function () {
+var loadEnvConfigs = function loadEnvConfigs() {
 
   var config = {};
 
   // Override configurations from the $NODE_CONFIG environment variable
   if (process.env.NODE_CONFIG) {
-    var envConfig = internals.parseConfig(process.env.NODE_CONFIG, "$NODE_CONFIG");
+    var envConfig = parseConfig(process.env.NODE_CONFIG, "$NODE_CONFIG");
     if (envConfig) {
       _hoek2["default"].merge(config, envConfig);
     }
@@ -213,7 +213,7 @@ internals.loadEnvConfigs = function () {
 
   // Override configurations from the --NODE_CONFIG command line
   if (argv.NODE_CONFIG) {
-    var cmdLineConfig = internals.parseConfig(argv.NODE_CONFIG, "--NODE_CONFIG argument");
+    var cmdLineConfig = parseConfig(argv.NODE_CONFIG, "--NODE_CONFIG argument");
     if (cmdLineConfig) {
       _hoek2["default"].merge(config, cmdLineConfig);
     }
@@ -222,23 +222,23 @@ internals.loadEnvConfigs = function () {
   return config;
 };
 
-internals.loadConfigs = function () {
+var loadConfigs = function loadConfigs(configDir) {
 
   var config = {};
 
   // Initialize parameters from command line, environment, or default
-  var NODE_ENV = internals.initParam("NODE_ENV", "development");
-  var APP_INSTANCE = internals.initParam("NODE_APP_INSTANCE");
-  var HOST = internals.initParam("HOST");
-  var HOSTNAME = internals.initParam("HOSTNAME");
-  var CONFIG_DIR = internals.initConfigDir("NODE_CONFIG_DIR");
+  var NODE_ENV = initParam("NODE_ENV", "development");
+  var APP_INSTANCE = initParam("NODE_APP_INSTANCE");
+  var HOST = initParam("HOST");
+  var HOSTNAME = initParam("HOSTNAME");
+  var CONFIG_DIR = initConfigDir("NODE_CONFIG_DIR", configDir);
 
-  var hostName = internals.getHostName(HOST || HOSTNAME);
+  var hostName = getHostName(HOST || HOSTNAME);
 
   // Read each file in turn
   var baseNames = ["default", NODE_ENV, hostName, hostName + "-" + NODE_ENV, "local", "local-" + NODE_ENV];
 
-  var fileConfig = internals.loadFileConfigs(baseNames, {
+  var fileConfig = loadFileConfigs(baseNames, {
     configDir: CONFIG_DIR,
     appInstance: APP_INSTANCE
   });
@@ -247,10 +247,10 @@ internals.loadConfigs = function () {
     _hoek2["default"].merge(config, fileConfig);
   }
 
-  _hoek2["default"].merge(config, internals.loadEnvConfigs());
+  _hoek2["default"].merge(config, loadEnvConfigs());
 
   return config;
 };
 
-exports["default"] = internals.loadConfigs;
+exports["default"] = loadConfigs;
 module.exports = exports["default"];

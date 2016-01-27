@@ -1,6 +1,6 @@
 var code = require("code");
 var lab = require("lab").script();
-var EzConfig = require("../es6/EzConfig");
+var EzConfig = require("../lib/ez-config");
 
 var describe = lab.describe;
 var it = lab.it;
@@ -17,7 +17,7 @@ describe("config", function () {
 
   it("loads all configs", function (done) {
 
-    var config = require("../es6");
+    var config = require("../lib");
 
     // Is it a proper config?
     expect(config).to.be.an.instanceof(EzConfig);

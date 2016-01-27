@@ -10,18 +10,22 @@ var _hoek = require("hoek");
 
 var _hoek2 = _interopRequireDefault(_hoek);
 
-var _loadConfigs = require("./loadConfigs");
+var _loadConfigs = require("./load-configs");
 
 var _loadConfigs2 = _interopRequireDefault(_loadConfigs);
 
-var Config = (function () {
-  function Config() {
-    _classCallCheck(this, Config);
+var EzConfig = (function () {
+  function EzConfig() {
+    _classCallCheck(this, EzConfig);
 
-    this.values = _loadConfigs2["default"]();
+    this.loadDir();
   }
 
-  Config.prototype.get = function get(prop) {
+  EzConfig.prototype.loadDir = function loadDir(dirname) {
+    this.values = _loadConfigs2["default"](dirname);
+  };
+
+  EzConfig.prototype.get = function get(prop) {
 
     var val = undefined;
 
@@ -34,8 +38,8 @@ var Config = (function () {
     return val;
   };
 
-  return Config;
+  return EzConfig;
 })();
 
-exports["default"] = Config;
+exports["default"] = EzConfig;
 module.exports = exports["default"];
